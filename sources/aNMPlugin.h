@@ -11,9 +11,7 @@ class aNMPlugin : public IUnknownInterfaceImpl<IAIMPAddonPlugin> {
 
     public:
 
-    aNMPlugin(HMODULE PluginInstance) {
-        pluginInstance = PluginInstance;
-    };
+    aNMPlugin(HMODULE PluginInstance) : pluginInstance(PluginInstance) {}
 
 
     virtual HRESULT WINAPI Initialize(IAIMPCoreUnit *ACoreUnit) override;
