@@ -1,25 +1,21 @@
 #include "aNMPlugin.h"
 
-void WINAPI ActionProc(void *UserData, int ID, HAIMPACTION Handle)
-{
+void WINAPI ActionProc(void *UserData, int ID, HAIMPACTION Handle) {
     MessageBox(0, "Action executed!", "ActionsDemoPlugin", MB_ICONINFORMATION);
 }
 
-HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
-{
+HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit) {
     FCoreUnit = ACoreUnit;
     FCoreUnit->AddRef();
 
     IAIMPAddonsActionManager *AActionsManager;
     IAIMPAddonsMenuManager2 *AMenuManager;
 
-    if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **)&AActionsManager) == S_OK)
-    {
-        if (AActionsManager->ActionCreate(pluginInstance, 1, ActionProc, NULL, &FActionHandle) == S_OK)
-        {
+    if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **) &AActionsManager) == S_OK) {
+        if (AActionsManager->ActionCreate(pluginInstance, 1, ActionProc, NULL, &FActionHandle) == S_OK) {
             WCHAR *AActionName = L"Demo Action";
             WCHAR *AGroupName = L"Demo Action Plugin Group";
- 
+
             // Setup action display name
             AActionsManager->ActionPropertySetValue(FActionHandle, AIMP_ACTION_PROPERTY_NAME, AActionName, wcslen(AActionName) * sizeof(WCHAR));
             // Setup action group name
@@ -30,12 +26,11 @@ HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
             AActionsManager->ActionPropertySetValue(FActionHandle, AIMP_ACTION_PROPERTY_DEFAULTLOCALHOTKEY, &AHotKey, sizeof(AHotKey));
         }
         AActionsManager->Release();
-      
+
         // Create menu item and link the action to it
-        if (FCoreUnit->QueryInterface(IID_IAIMPAddonsMenuManager2, (void **)&AMenuManager) == S_OK)
-        {
+        if (FCoreUnit->QueryInterface(IID_IAIMPAddonsMenuManager2, (void **) &AMenuManager) == S_OK) {
             TAIMPMenuItemInfo AMenuItem;
-            
+
             memset(&AMenuItem, 0, sizeof(AMenuItem));
             AMenuItem.StructSize = sizeof(AMenuItem);
             AMenuItem.Caption = L"Menu Item with Action";
@@ -47,27 +42,24 @@ HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
     return S_OK;
 };
 
-HRESULT WINAPI aNMPlugin::Finalize()
-{
+HRESULT WINAPI aNMPlugin::Finalize() {
     IAIMPAddonsActionManager *AActionsManager;
     IAIMPAddonsMenuManager *AMenuManager;
 
     // Removing action handle
-    if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **)&AActionsManager) == S_OK)
-    {
+    if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **) &AActionsManager) == S_OK) {
         AActionsManager->ActionRemove(FActionHandle);
         AActionsManager->Release();
         FActionHandle = NULL;
     }
 
     // Removing menu item
-    if (FCoreUnit->QueryInterface(IID_IAIMPAddonsMenuManager, (void **)&AMenuManager) == S_OK)
-    {
+    if (FCoreUnit->QueryInterface(IID_IAIMPAddonsMenuManager, (void **) &AMenuManager) == S_OK) {
         AMenuManager->MenuRemove(FMenuHandle);
         AMenuManager->Release();
         FMenuHandle = NULL;
     }
-        
+
     // Release core unit
     FCoreUnit->Release();
     FCoreUnit = NULL;
