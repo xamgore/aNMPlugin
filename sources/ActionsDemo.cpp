@@ -1,10 +1,9 @@
-// AddonDemo.cpp : Defines the exported functions for the DLL application.
-//
+/* Defines the exported functions for the DLL application. */
 
 #include "aNMPlugin.h"
 #include "api\AIMPSDKAddons.h"
 
-HMODULE PluginInstance = 0;
+HMODULE PluginInstance = nullptr;
 
 BOOL WINAPI AIMP_QueryAddon3(IAIMPAddonPlugin **AHeader) {
     aNMPlugin *Plugin = new aNMPlugin(PluginInstance);
@@ -13,13 +12,13 @@ BOOL WINAPI AIMP_QueryAddon3(IAIMPAddonPlugin **AHeader) {
     return true;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-    switch (ul_reason_for_call) {
+BOOL WINAPI DllMain(HMODULE module, DWORD reasonForCall, LPVOID lpReserved) {
+    switch (reasonForCall) {
         case DLL_PROCESS_ATTACH:
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:
         case DLL_PROCESS_DETACH:
-            PluginInstance = hModule;
+            PluginInstance = module;
             break;
     }
     return TRUE;
