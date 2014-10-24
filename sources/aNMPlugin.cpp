@@ -12,7 +12,7 @@ HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit) {
     IAIMPAddonsMenuManager2 *AMenuManager;
 
     if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **) &AActionsManager) == S_OK) {
-        if (AActionsManager->ActionCreate(pluginInstance, 1, ActionProc, NULL, &FActionHandle) == S_OK) {
+        if (AActionsManager->ActionCreate(pluginInstance, 1, ActionProc, nullptr, &FActionHandle) == S_OK) {
             WCHAR *AActionName = L"Demo Action";
             WCHAR *AGroupName = L"Demo Action Plugin Group";
 
@@ -37,7 +37,7 @@ HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit) {
             FMenuHandle = AMenuManager->MenuCreate(AIMP_MENUID_UTILITIES, &AMenuItem);
             AMenuManager->MenuSetAction(FMenuHandle, FActionHandle);
             AMenuManager->Release();
-        };
+        }
     }
     return S_OK;
 };
@@ -50,19 +50,19 @@ HRESULT WINAPI aNMPlugin::Finalize() {
     if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **) &AActionsManager) == S_OK) {
         AActionsManager->ActionRemove(FActionHandle);
         AActionsManager->Release();
-        FActionHandle = NULL;
+        FActionHandle = nullptr;
     }
 
     // Removing menu item
     if (FCoreUnit->QueryInterface(IID_IAIMPAddonsMenuManager, (void **) &AMenuManager) == S_OK) {
         AMenuManager->MenuRemove(FMenuHandle);
         AMenuManager->Release();
-        FMenuHandle = NULL;
+        FMenuHandle = nullptr;
     }
 
     // Release core unit
     FCoreUnit->Release();
-    FCoreUnit = NULL;
+    FCoreUnit = nullptr;
     return S_OK;
 }
 
@@ -75,7 +75,7 @@ PWCHAR aNMPlugin::GetPluginAuthor() {
 }
 
 PWCHAR aNMPlugin::GetPluginInfo() {
-    return L"Sends information about currently playing file to http://annimon.com";
+    return L"Sends information about currently playing file to http://annimon.com/";
 }
 
 DWORD aNMPlugin::GetPluginFlags() {
