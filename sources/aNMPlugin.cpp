@@ -2,10 +2,10 @@
 
 void WINAPI ActionProc(void *UserData, int ID, HAIMPACTION Handle)
 {
-    MessageBox(0, L"Action executed!", L"ActionsDemoPlugin", MB_ICONINFORMATION);
+    MessageBox(0, "Action executed!", "ActionsDemoPlugin", MB_ICONINFORMATION);
 }
 
-HRESULT WINAPI ActionsDemoPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
+HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
 {
     FCoreUnit = ACoreUnit;
     FCoreUnit->AddRef();
@@ -15,7 +15,7 @@ HRESULT WINAPI ActionsDemoPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
 
     if (FCoreUnit->QueryInterface(IID_IAIMPAddonsActionManager, (void **)&AActionsManager) == S_OK)
     {
-        if (AActionsManager->ActionCreate(FPluginInstance, 1, ActionProc, NULL, &FActionHandle) == S_OK)
+        if (AActionsManager->ActionCreate(pluginInstance, 1, ActionProc, NULL, &FActionHandle) == S_OK)
         {
             WCHAR *AActionName = L"Demo Action";
             WCHAR *AGroupName = L"Demo Action Plugin Group";
@@ -47,7 +47,7 @@ HRESULT WINAPI ActionsDemoPlugin::Initialize(IAIMPCoreUnit *ACoreUnit)
     return S_OK;
 };
 
-HRESULT WINAPI ActionsDemoPlugin::Finalize()
+HRESULT WINAPI aNMPlugin::Finalize()
 {
     IAIMPAddonsActionManager *AActionsManager;
     IAIMPAddonsMenuManager *AMenuManager;

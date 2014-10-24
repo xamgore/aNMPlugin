@@ -1,4 +1,5 @@
-#include "aimp_api\AIMPSDKHelpers.h"
+#include "api/AIMPSDKHelpers.h"
+#include "api/AIMPSDKAddons.h"
 
 class aNMPlugin: public IUnknownInterfaceImpl<IAIMPAddonPlugin>
 {
@@ -10,7 +11,7 @@ private:
     IAIMPCoreUnit *FCoreUnit;
 
 public:
-    ActionsDemoPlugin(HMODULE PluginInstance)
+    aNMPlugin(HMODULE PluginInstance)
     {
         pluginInstance = PluginInstance;
     };

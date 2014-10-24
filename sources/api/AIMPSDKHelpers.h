@@ -18,7 +18,7 @@
 #ifndef AIMPSDKHelpersH
 #define AIMPSDKHelpersH
 
-#include "..\AIMPSDKAddons.h"
+#include "AIMPSDKAddons.h"
 #include <Unknwn.h>
 #include <vector>
 #include <memory>
