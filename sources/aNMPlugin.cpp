@@ -64,4 +64,24 @@ HRESULT WINAPI aNMPlugin::Finalize() {
     FCoreUnit->Release();
     FCoreUnit = NULL;
     return S_OK;
+}
+
+PWCHAR aNMPlugin::GetPluginName() {
+    return L"aNMusic v1.3";
+}
+
+PWCHAR aNMPlugin::GetPluginAuthor() {
+    return L"ksakep";
+}
+
+PWCHAR aNMPlugin::GetPluginInfo() {
+    return L"Sends information about currently playing file to http://annimon.com";
+}
+
+DWORD aNMPlugin::GetPluginFlags() {
+    return AIMP_ADDON_FLAGS_HAS_DIALOG;
+}
+
+HRESULT aNMPlugin::ShowSettingsDialog(HWND AParentWindow) {
+    return S_OK; // Create the settingsForm.ShowModal();
 };
