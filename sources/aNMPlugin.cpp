@@ -4,8 +4,8 @@ void WINAPI ActionProc(void *UserData, int ID, HAIMPACTION Handle) {
     MessageBox(0, L"Action executed!", L"ActionsDemoPlugin", MB_ICONINFORMATION);
 }
 
-HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit) {
-    FCoreUnit = ACoreUnit;
+HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *coreUnit) {
+    FCoreUnit = coreUnit;
     FCoreUnit->AddRef();
 
     IAIMPAddonsActionManager *AActionsManager;
@@ -85,3 +85,20 @@ DWORD aNMPlugin::GetPluginFlags() {
 HRESULT aNMPlugin::ShowSettingsDialog(HWND AParentWindow) {
     return S_OK; // Create the settingsForm.ShowModal();
 };
+
+HRESULT WINAPI aNMPlugin::QueryInterface(const IID &, void **) {
+    return S_OK;
+}
+
+ULONG WINAPI aNMPlugin::AddRef() {
+    return S_OK;
+}
+
+ULONG WINAPI aNMPlugin::Release() {
+    return S_OK;
+}
+
+BOOL WINAPI AIMP_QueryAddon3(IAIMPAddonPlugin **plugin) {
+    *plugin = new aNMPlugin();
+    return true;
+}

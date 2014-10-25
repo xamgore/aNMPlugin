@@ -30,26 +30,14 @@
     <ClInclude Include="..\sources\api\AIMPSDKHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\sources\api\AIMPSDKInput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sources\api\AIMPSDKRemote.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sources\api\AIMPSDKVisual.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\sources\ActionsDemo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\sources\aNMPlugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ActionsDemo.def">
+    <None Include="..\sources\aNMPlugin.def">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
