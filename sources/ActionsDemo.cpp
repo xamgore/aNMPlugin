@@ -1,5 +1,5 @@
 /* Defines the exported functions for the DLL application. */
-
+#include <windows.h>
 #include "aNMPlugin.h"
 #include "api\AIMPSDKAddons.h"
 
