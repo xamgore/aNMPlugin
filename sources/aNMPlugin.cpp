@@ -1,7 +1,7 @@
 #include "aNMPlugin.h"
 
 void WINAPI ActionProc(void *UserData, int ID, HAIMPACTION Handle) {
-    MessageBox(0, "Action executed!", "ActionsDemoPlugin", MB_ICONINFORMATION);
+    MessageBox(0, L"Action executed!", L"ActionsDemoPlugin", MB_ICONINFORMATION);
 }
 
 HRESULT WINAPI aNMPlugin::Initialize(IAIMPCoreUnit *ACoreUnit) {
