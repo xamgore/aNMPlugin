@@ -1,3 +1,6 @@
+aNMPlugin/aimp
+--------------
+
 The latest stable build was compiled using RAD Studio 7.
 Delphi project can be found [here](https://github.com/xamgore/aNMPlugin/tree/master/delphi). 
 Recently I have made an attempt to rewrite the plugin using AIMP API v3.0, but delphi is an awful language,
