@@ -1,0 +1,13 @@
+[Unit]
+Description=aNMusic scrobbler for Music Player Daemon
+Wants=mpd.service
+After=mpd.service
+
+[Service]
+Environment=MPD_HOST=localhost MPD_PORT=6600
+ExecStart=/home/kalterfx/.config/systemd/scripts/anmusic
+Restart=always
+RestartSec=2m
+
+[Install]
+WantedBy=default.target

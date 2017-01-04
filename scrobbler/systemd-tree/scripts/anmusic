@@ -1,0 +1,105 @@
+#!/bin/bash -e
+
+function mpd_connect()
+{
+	eval 'exec' "${MPD_FD}<>" "'$MPD_TCP'"
+}
+
+function mpd_disconnect()
+{
+	eval 'exec' "${MPD_FD}>&-"
+	eval 'exec' "${MPD_FD}<&-"
+}
+
+function mpd_send_command()
+{
+	eval 'cat' ">&$MPD_FD" <<-COMMANDEOF
+$*
+COMMANDEOF
+}
+
+function mpd_fetch_answer()
+{
+	eval 'cat' "<&$MPD_FD"
+}
+
+TCP_PATH='/dev/tcp'
+MPD_FD='4'
+
+DEFAULT_HOST='localhost'
+DEFAULT_PORT='6600'
+
+MPD_HOST="${MPD_HOST:-"$DEFAULT_HOST"}"
+MPD_PORT="${MPD_PORT:-"$DEFAULT_PORT"}"
+
+MPD_TCP="${MPD_TCP:-"$TCP_PATH/$MPD_HOST/$MPD_PORT"}"
+
+# ----
+
+function set_user_info()
+{
+	readonly USER_LOGIN='' ANMUSIC_TOKEN=''
+}
+
+function configure_everything()
+{
+	set_user_info
+
+	readonly ANMUSIC_API_ADDRESS='http://annimon.com/json/nowplay.php'
+}
+
+function song_is_playing()
+{
+	mpd_connect
+	mpd_send_command 'status'
+	mpd_send_command 'close'
+	local song_state="$(mpd_fetch_answer | grep '^state:' | sed -r 's/^state: //')"
+	mpd_disconnect
+
+	[[ "$song_state" == 'play' ]]
+}
+
+function get_current_song_related_info()
+{
+	local desired_property="$1"
+
+	mpd_connect
+	mpd_send_command 'currentsong'
+	mpd_send_command 'close'
+	local song_artist="$(mpd_fetch_answer | grep "^$desired_property:" | sed -r "s/^$desired_property: //")"
+	mpd_disconnect
+
+	cat <<< "$song_artist"
+}
+
+function get_current_song_artist() { get_current_song_related_info 'Artist'; }
+function get_current_song_title() { get_current_song_related_info 'Title'; }
+function get_current_song_genre() { get_current_song_related_info 'Genre'; }
+
+function form_anmusic_set_request()
+{
+	declare -A ANMUSIC_REQUEST=( ['act']='set' ['login']="$USER_LOGIN" ['token']="$ANMUSIC_TOKEN" )
+
+	local ANMUSIC_REQUEST
+
+	ANMUSIC_REQUEST+=( ['artist']="$(get_current_song_artist)" )
+	ANMUSIC_REQUEST+=( ['title']="$(get_current_song_title)" )
+	ANMUSIC_REQUEST+=( ['genre']="$(get_current_song_genre)" )
+
+	local anmusic_request_form
+
+	local current_request_key current_request_value current_request_part
+
+	for current_request_key in act login token artist genre title; do
+
+		current_request_part="${current_request_key}=${ANMUSIC_REQUEST["$current_request_key"]}"
+		anmusic_request_form+="${current_request_part}&"
+	done
+
+	cat <<< "$anmusic_request_form"
+}
+
+configure_everything "$@"
+
+if song_is_playing; then curl -d "$(form_anmusic_set_request)" "$ANMUSIC_API_ADDRESS"; fi
+
